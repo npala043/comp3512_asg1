@@ -12,9 +12,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Fetch info from API
     const url = "https://www.randyconnolly.com/funwebdev/3rd/api/art/galleries.php";
+
     const response = fetch(url)
         .then(response => response.json())
-        .then(data => popGalleries(data))
+        .then(data => toGalleries(data))
         .catch(err => console.error(err));
     // For the above (and below), Nahuel used:
     // https://css-tricks.com/using-fetch/
@@ -22,15 +23,19 @@ document.addEventListener("DOMContentLoaded", function () {
     // https://stackoverflow.com/questions/38380462/syntaxerror-unexpected-token-o-in-json-at-position-1
     // to understand what to do
 
+    let galleries = ``;
+    function toGalleries(data) {
+        galleries = data;
+        console.log(galleries);
+    }
 
     // Display List of Galleries
-    function popGalleries(data) {
-        let list = ``;
-        for (let g of data) {
-            list += `<p>${g.GalleryName}</p><br>`;
-        }
-        document.querySelector("#galleries").innerHTML = list;
+    let list = ``;
+    for (let g of galleries) {
+        console.log(g);
+        list += `<p>${g.GalleryName}</p><br>`;
     }
+    document.querySelector("#galleries").innerHTML = list;
 
     // Populate Sections 3, 4 and 5
     const paras = document.querySelectorAll("#galleries p");
@@ -41,17 +46,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (e.target.textContent === g.GalleryName) {
                     gallery = g;
                     break;
+
                 }
             }
+            alert(gallery);
             // Populate Gallery Info
             const g = document.querySelector("#info");
             //need to implement: grab painting from corresponding API
-            const info = document.querySelectorAll(".galleryInfo");
-            for (let i of info) {
 
-            }
-
-
+            
             // Populate Map
 
 
