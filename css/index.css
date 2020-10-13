@@ -1,0 +1,74 @@
+::-webkit-scrollbar {
+    width: 0.75em;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background: #d9d9d9;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: grey;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    border-radius: 5px;
+    background-color: #666666;
+}
+
+body {
+    margin: 1em;
+    overflow: hidden;
+}
+
+header {
+    background-color: green;
+    border-radius: 5px;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 1em;
+    height: 87vh;
+}
+
+.container div {
+    padding: 1em;
+    border-radius: 5px;
+    overflow: auto;
+    background-color: #d9d9d9;
+}
+
+#galleries {
+    /* background-color: red; */
+    grid-column: 1, 2;
+    grid-row: 1 / span 2;
+}
+
+#info {
+    /* background-color: orange; */
+    grid-column: 2 / span 2;
+}
+
+#map {
+    /* background-color: lightblue; */
+    grid-column: 2 / span 2;
+}
+
+#paintings {
+    /* background-color: orchid; */
+    grid-column: 4 / span 2;
+    grid-row: 1 / span 2;
+}
+
+#single {
+    /* background-color: grey; */
+    display: none;
+    grid-column: 1 / span 5;
+    grid-row: 1 / span 2;
+}
