@@ -19,49 +19,53 @@
 
 body {
     margin: 1em;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 header {
-    background-color: green;
+    background-color: #5680E9;
     border-radius: 5px;
     padding: 1em;
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
 }
 
 .container {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    gap: 1em;
-    height: 87vh;
+    gap: 0.5em;
+    height: 80vh;
 }
 
 .container div {
     padding: 1em;
     border-radius: 5px;
     overflow: auto;
-    background-color: #d9d9d9;
+    /* background-color: #d9d9d9; */
 }
 
 #galleries {
-    /* background-color: red; */
+    background-color: #84CEEB;
     grid-column: 1, 2;
     grid-row: 1 / span 2;
 }
 
+ul {
+    list-style: none;
+}
+
 #info {
-    /* background-color: orange; */
+    background-color: #83fbc1;
     grid-column: 2 / span 2;
 }
 
 #map {
-    /* background-color: lightblue; */
+    background-color: #C1C8E4;
     grid-column: 2 / span 2;
 }
 
 #paintings {
-    /* background-color: orchid; */
+    background-color: #8860D0;
     grid-column: 4 / span 2;
     grid-row: 1 / span 2;
 }
@@ -71,4 +75,18 @@ header {
     display: none;
     grid-column: 1 / span 5;
     grid-row: 1 / span 2;
+}
+
+.loader {
+    display: inline-block;
+    justify-content: center;
+}
+
+#gMap {
+    height: 328px;
+}
+
+#paintingTable {
+    text-align: center;
+    width: 100%;
 }

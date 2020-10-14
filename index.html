@@ -16,15 +16,28 @@
         <p>Anthony Dang, Nahuel Paladino</p>
     </header>
     <div class="container">
-        <div id="galleries" class="listView"></div>
+        <div id="galleries" class="listView">
+            <img id="loader1" class="loader" src="resources/loading.gif"></img>
+        </div>
         <div id="info" class="listView">
-            <p class="galleryInfo"></p>
+            <h2>Gallery Information:</h2>
+            <img id="loader2" class="loader" src="resources/loading.gif"></img>
         </div>
-        <div id="map" class="listView"></div>
+        <div id="map" class="listView">
+            <img id="loader3" class="loader" src="resources/loading.gif"></img>
+            <div id="gMap">
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBV0lXUKm43lYPD1QVAt9RMRCujnLZkPRQ&callback=initMap"></script> 
+            </div>
+        </div>
         <div id="paintings" class="listView">
-            <button id="singleView">4</button>
+            <img id="loader4" class="loader" src="resources/loading.gif"></img>
+            <!-- <button id="singleView">4</button> -->
+            <table id="paintingTable">
+            </table>
         </div>
-        <div id="single">5</div>
+        <div id="single">
+            <img id="loader4" class="loader" src="resources/loading.gif"></img>
+        </div>
     </div>
 </body>
 
