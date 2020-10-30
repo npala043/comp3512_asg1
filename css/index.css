@@ -17,10 +17,7 @@
     background-color: #666666;
 }
 
-body {
-    margin: 1em;
-    /* overflow: hidden; */
-}
+/* The above was modified from https://www.w3schools.com/howto/howto_css_custom_scrollbar.asp */
 
 header {
     background-color: #5680E9;
@@ -40,14 +37,13 @@ header {
 .container div {
     padding: 1em;
     border-radius: 5px;
-    overflow: auto;
-    /* background-color: #d9d9d9; */
 }
 
 #galleries {
     background-color: #84CEEB;
     grid-column: 1, 2;
     grid-row: 1 / span 2;
+    overflow: auto;
 }
 
 ul {
@@ -62,19 +58,41 @@ ul {
 #map {
     background-color: #C1C8E4;
     grid-column: 2 / span 2;
+    grid-row: 2 / span 1;
+    padding: 0px;
+    height: 100%;
+    width: 100%;
 }
 
 #paintings {
     background-color: #8860D0;
     grid-column: 4 / span 2;
     grid-row: 1 / span 2;
+    overflow: auto;
 }
 
 #single {
     background-color: grey;
     display: none;
     grid-column: 1 / span 5;
-    grid-row: 1 / span 2;
+    grid-row: 1 / span 1;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+#painting {
+    grid-column: 1;
+}
+
+#painting img {
+    width: 100%;
+}
+
+#painting_info {
+    grid-column: 2;
+}
+
+#painting_info section div {
+    border-radius: 0px;
 }
 
 .loader {
@@ -82,17 +100,11 @@ ul {
     justify-content: center;
 }
 
-#gMap {
-    height: 328px;
+.hidden {
+    display: none;
 }
 
-#paintingTable {
-    text-align: center;
-    width: 100%;
-}
-
-.ptitle {
-    cursor: pointer;
-    color: blue;
-    text-decoration: underline;
+#toggle {
+    height: 20px;
+    width: 100px;
 }
