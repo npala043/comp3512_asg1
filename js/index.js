@@ -1,8 +1,14 @@
+let map;
+function initMap() {
+    map = new google.maps.Map(document.querySelector('#gMap'), {
+        center: { lat: 41.89474, lng: 12.4839 },
+        zoom: 6
+    });
+}
 document.addEventListener("DOMContentLoaded", function () {
 
     const galleriesURL = "https://www.randyconnolly.com/funwebdev/3rd/api/art/galleries.php";
     const infoURL = 'https://www.randyconnolly.com/funwebdev/3rd/api/art/paintings.php?gallery='; // append galleryID here
-    // Image url https://res.cloudinary.com/funwebdev/image/upload/SIZE/art/paintings/FILENAME
 
     const galleries = document.querySelector("#galleries");
     const info = document.querySelector("#info");
@@ -52,20 +58,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ------------------------- Helper Functions ------------------------- //
 
-    // function displayMap(data, id) {
-
-    // }
+    function displayMap(data, id) {
+        let gal = data.find(g => g.GalleryID == id);
+        map.center.lat = gal.Latitude;
+        map.center.lng = gal.Longitude;
+    }
 
     function displayPaintings(id) {
         fetch(infoURL + id)
             .then(response => response.json())
-            .then(data => displayPaintingTable(data))
+            .then(data => displayPaintingTable(data, 0))
             .catch(err => console.error(err));
     }
 
-    function displayPaintingTable(paintings) {
+    // 1 = descending
+    // -1 = ascending
+    let sortName = 1;
+    let sortTitle = 1;
+    let sortYear = 1;
+    
+    function displayPaintingTable(paintings, mode) {
         pTable.innerHTML = "";
         addTableHeaders();
+        switch(mode) {
+            case 0:
+                if (sortName > 0) {
+                    paintings.sort((a, b) => a.LastName.localeCompare(b.LastName));
+                } else {
+                    paintings.sort(-1 * ((a, b) => a.LastName.localeCompare(b.LastName)));
+                }
+                sortName *= -1;
+                break;
+            case 1:
+                if (sortTitle > 0) {
+                    paintings.sort((a, b) => a.Title.localeCompare(b.Title));
+                } else {
+                    paintings.sort(-1 * ((a, b) => a.Title.localeCompare(b.Title)));
+                }
+                sortTitle *= -1;
+                break;
+            case 2:
+                if (sortYear > 0) {
+                    paintings.sort((a, b) => a.YearOfWork.localeCompare(b.YearOfWork));
+                } else {
+                    paintings.sort(-1 * ((a, b) => a - b));
+                }
+                sortYear *= -1;
+                break;
+        }
         paintings.forEach(p => {
             const tr = document.createElement("tr");
 
@@ -81,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Painting title
             const tdTitle = document.createElement("td");
-            tdTitle.setAttribute("style", "cursor:pointer; color:blue; text-decoration:underline;");
+            tdTitle.setAttribute("style", "cursor:pointer; color:blue; font-weight:bold;");
             tdTitle.classList.add("paintingTitle");
             const title = document.createTextNode(`${p.Title}`);
             tdTitle.appendChild(title);
@@ -102,22 +142,33 @@ document.addEventListener("DOMContentLoaded", function () {
     function addTableHeaders() {
         const tr = document.createElement("tr");
 
+        const headers = [];
+       
         // Artist Header
         const thArtist = document.createElement("th");
         thArtist.appendChild(document.createTextNode("Artist"));
+        headers.push(thArtist);
 
         // Title Header
         const thTitle = document.createElement("th");
         thTitle.appendChild(document.createTextNode("Title"));
+        headers.push(thTitle);
 
         // Year Header
         const thYear = document.createElement("th");
         thYear.appendChild(document.createTextNode("Year"));
+        headers.push(thYear);
 
+        // Image Header
         tr.appendChild(document.createElement("th"));
-        tr.appendChild(thArtist);
-        tr.appendChild(thTitle);
-        tr.appendChild(thYear);
+
+        headers.forEach(h => {
+            h.addEventListener("click", function () {
+                
+            });
+            tr.appendChild(h);
+        });
+
         paintingTable.appendChild(tr);
     }
 
@@ -128,15 +179,68 @@ document.addEventListener("DOMContentLoaded", function () {
                 const divs = document.querySelectorAll(".listView");
                 divs.forEach(d => d.style.display = "none");
                 document.querySelector("#single").style.display = "grid";
-                displaySinglePainting(data.find(d => d.Title == e.target.innerHTML).ImageFileName);
+                displaySinglePainting(data.find(d => d.Title == e.target.innerHTML));
             });
         });
     }
 
-    function displaySinglePainting(fileName) {
+    function displaySinglePainting(painting) {
+        load4.style.display = "none";
         const img = document.createElement("img");
-        img.src = `https://res.cloudinary.com/funwebdev/image/upload/w_500/art/paintings/${fileName}`;
-        single.appendChild(img);
+        img.src = `https://res.cloudinary.com/funwebdev/image/upload/w_500/art/paintings/${painting.ImageFileName}`;
+        img.alt = `${painting.Title}`;
+        document.querySelector("#painting").appendChild(img);
+
+        const info = document.querySelector("#painting_info");
+
+        // Title
+        const h2 = document.createElement("h2");
+        h2.textContent = painting.Title;
+        info.appendChild(h2);
+
+        // Artist
+        let artist = `${painting.FirstName} ${painting.LastName}`;
+
+        // Year of Work
+        let yearOfWork = painting.YearOfWork;
+
+        // Medium
+        let medium = painting.Medium;
+
+        // Width
+        let width = painting.Width;
+
+        // Height
+        let height = painting.Height;
+
+        // Copyright
+        let copyright = painting.CopyrightText;
+
+        // Gallery Name
+        let name = painting.GalleryName;
+
+        // Gallery City
+        let city = painting.GalleryCity;
+
+        // Museum Link
+        let link = painting.MuseumLink;
+        const a = document.createElement("a");
+        a.href = link;
+        a.textContent = link;
+
+        // Description
+        let description = painting.Description;
+        const pDescription = document.createElement("p");
+        pDescription.textContent = description;
+        pDescription.style.fontStyle = "italic";
+        
+        const p = document.createElement("p");
+        let paintingInformation = `${artist}, ${yearOfWork}, ${medium}, ${width}, ${height}, ${copyright}, ${name}, ${city}`;
+        p.textContent = paintingInformation;
+        
+        info.appendChild(p);
+        info.appendChild(a);
+        info.appendChild(pDescription);
     }
 
     function displayGalleryList(data) {
@@ -187,11 +291,3 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
-
-// let map;
-// function initMap() {
-//     map = new google.maps.Map(document.querySelector('#gMap'), {
-//         center: { lat: 41.89474, lng: 12.4839 },
-//         zoom: 6
-//     });
-// }
