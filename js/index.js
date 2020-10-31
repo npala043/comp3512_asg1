@@ -15,12 +15,12 @@ function initMap() {
         streetViewControlOptions: {
             position: google.maps.ControlPosition.LEFT_TOP,
         },
-        fullscreenControl: true,
-        fullscreenControlOptions: {
-            position: google.maps.ControlPosition.RIGHT_TOP,
-        },
+        fullscreenControl: false,
     });
 }
+
+// Control display and positioning for map
+// https://developers.google.com/maps/documentation/javascript/examples/control-positioning
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -30,8 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const galleries = document.querySelector("#galleries");
     const info = document.querySelector("#info");
     const mapDiv = document.querySelector("#map");
-    const paintings = document.querySelector("#paintings");
-    const single = document.querySelector("#single");
     const load1 = document.querySelector("#loader1");
     const load2 = document.querySelector("#loader2");
     const load3 = document.querySelector("#loader3");
@@ -89,16 +87,19 @@ document.addEventListener("DOMContentLoaded", function () {
         container.appendChild(button);
         let t = -1;
         document.querySelector("#toggle").addEventListener("click", function () {
-            galleries.classList.toggle('hidden');
+            // galleries.classList.toggle('hidden');
             t = t * -1;
             if (t == 1) {
+                galleries.style.display = "none";
                 info.style.gridColumn = "1";
                 info.style.gridRow = "1/ span 2";
                 mapDiv.style.gridRow = "1/ span 2";
             } else {
+                galleries.style.display = "grid";
                 galleries.style.gridColumn = "1, 2";
                 galleries.style.gridRow = "1/ span 2";
                 info.style.gridColumn = "2/ span 2";
+                info.style.gridRow = "1 / 1";
                 mapDiv.style.gridColumn = "2/ span 2";
                 mapDiv.style.gridRow = "2/ span 1";
             }
@@ -109,6 +110,14 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayMap(data, id) {
         let gal = data.find(g => g.GalleryID == id);
         map.setCenter({ lat: gal.Latitude, lng: gal.Longitude });
+
+        // Add Marker for Gallery that was clicked
+        // https://developers.google.com/maps/documentation/javascript/markers
+        new google.maps.Marker({
+            position: new google.maps.LatLng(gal.Latitude, gal.Longitude),
+            map,
+            title: gal.GalleryName,
+        })
     }
 
     function displayPaintings(id) {
@@ -241,6 +250,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const img = document.createElement("img");
         img.src = `https://res.cloudinary.com/funwebdev/image/upload/art/paintings/${painting.ImageFileName}`;
         img.alt = `${painting.Title}`;
+        img.addEventListener("click", function (e) {
+            displayModal(e.target);
+        });
         document.querySelector("#painting").appendChild(img);
 
         const info = document.querySelector("#painting_info");
@@ -307,11 +319,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
         document.querySelector("#close").addEventListener("click", function () {
             const divs = document.querySelectorAll(".listView");
-            divs.forEach(d => d.style.display = "grid");
+            divs.forEach(d => d.style.display = "block");
             document.querySelector("#toggle").style.display = "grid";
             const single = document.querySelector("#single");
             single.style.display = "none";
         });
+
+        load5.style.display = "none";
+
+    }
+
+    function displayModal(img) {
+        let modal = document.querySelector("#modal");
+        let modalContent = document.querySelector("#modal-content");
+        modalContent.innerHTML = "";
+        modal.style.display = "block";
+
+        const image = document.createElement("img");
+        image.src = img.src;
+        modalContent.appendChild(image);
+
+        image.addEventListener("click", function (e) {
+            modal.style.display = "none";
+        });
+
+        window.addEventListener("click", function (e) {
+            if (e.target == modal) {
+                modal.style.display = "none";
+            }
+        })
+
     }
 
     function displayGalleryList(data) {
@@ -358,6 +395,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const pWebsite = document.createElement("a");
         pWebsite.href = `${gallery.GalleryWebSite}`;
         pWebsite.textContent = `${gallery.GalleryWebSite}`;
+        pWebsite.target = "_blank";
         info.appendChild(pWebsite);
     }
 });
